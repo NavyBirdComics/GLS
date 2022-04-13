@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLS Test</title>
+    <script src="js/jquery.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+
+            $.ajax({
+                url: "https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&amp;refresh=true&amp;env=dev&amp;type=startPanel&amp;vars%5Btype%5D=startPanel&amp;sid=none&amp;_=1582203987867",
+                dataType: "jsonp",
+                jsonpCallback: "jsonCallback"
+            });
+        });
+
+
+        function jsonCallback(json) {
+            console.log(json);
+        }
+
+    </script>
+    
+    <link rel="stylesheet" href="https://guidedlearning.oracle.com/player/latest/static/css/stTip.css">
+</head>
+
+<body>
+    <div class="sttip">
+        <div class="tooltip in">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-arrow second-arrow"></div>
+            <div class="popover-inner">
+                <-- tiplate goes here -->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
