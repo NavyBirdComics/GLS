@@ -21,11 +21,18 @@
 
 
         function jsonCallback(json) {
-            console.log(json);
+            let steps = json.data.structure.steps;
+            steps.forEach(step => {
+                console.log(step);
+            });
+            console.log(json.data.tiplates.tip);
+            console.log(json.data.tiplates.hoverTip);
+            console.log(json.data.css);
+            console.log(json.data.settings);
         }
 
     </script>
-    
+
     <link rel="stylesheet" href="https://guidedlearning.oracle.com/player/latest/static/css/stTip.css">
 </head>
 
