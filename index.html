@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLS Test</title>
+
     <script src="js/jquery.js"></script>
     <script>
 
@@ -21,18 +22,62 @@
 
 
         function jsonCallback(json) {
+            let tipContainerHtml = json.data.tiplates.tip;
             let steps = json.data.structure.steps;
+            let tipCss = json.data.css;
+
+            //generate every step
             steps.forEach(step => {
                 console.log(step);
             });
-            console.log(json.data.tiplates.tip);
+            doStep(steps[1], tipContainerHtml);
+
+            console.log(tipContainerHtml);
+
+            //hovertip
             console.log(json.data.tiplates.hoverTip);
-            console.log(json.data.css);
+            applyHTML(json.data.tiplates.hovertip);
+
+            //applying css from jsonp
+            applyCSS(tipCss);
+
+            //settings
             console.log(json.data.settings);
         }
 
-    </script>
+        function applyCSS(cssString) {
+            $("<style>" + cssString + "</style>").appendTo("head");
+        }
 
+        function applyHTML(htmlString) {
+            $(htmlString).appendTo(".popover-inner");
+        }
+
+        function doStep(step, container) {
+
+            if (step.action.type == "tip") {
+                //removing previously added classes
+                $('.tooltip').removeClass(stepClass);
+
+                //handling html
+                stepHTML = step.action.contents;
+                stepHTML = Object.values(stepHTML)[0];
+                $(".popover-inner").html(stepHTML);
+
+                //applying the step's classes
+                var stepClass = step.action.classes;
+                $('.tooltip').addClass(stepClass);
+
+                //putting the step in its placement
+                $('div').css("float", step.action.placement);
+
+                //displaying the step's index
+                let tipStepIndex = container.indexOf('>Step ');
+                applyHTML(container.substring(0, tipStepIndex + 6) + step.action.stepOrdinal + " " + container.substring(tipStepIndex + 6));
+            }
+        }
+
+    </script>
     <link rel="stylesheet" href="https://guidedlearning.oracle.com/player/latest/static/css/stTip.css">
 </head>
 
