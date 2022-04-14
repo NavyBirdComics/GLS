@@ -1,0 +1,62 @@
+The project is a guided learning frontend engine on google.com
+
+It shows several tips, each tip highlights the element it explains and shows the tip in the container.
+
+Move between the tips by using the next and back buttons.
+
+Back button will appear after the first tip.
+
+On the last tip, next button will turn into a done button and close the program.
+
+Program can also close by pressing the X button.
+
+Remind me later button will show the tip again in 5 seconds. (Irl this would be a longer time, but for the sake of testing it's set to 5 seconds.)
+
+Container will also appear in position relevant to the element and fade in after relevant time.
+
+---------
+
+Set-up instructions
+
+
+1. Setting up wrapper for tips:
+
+On google.com page, open DevTools and go to Elements tab.
+Find the first div tag after the body tag, left click and select 'edit as HTML'.
+Copy and paste the text below above that div tag:
+
+<div class="sttip">
+<div class="tooltip in">
+    <div class="tooltip-arrow"></div>
+    <div class="tooltip-arrow second-arrow"></div>
+    <div class="popover-inner">
+        <-- tiplate goes here -->
+    </div>
+</div>
+</div>
+
+2. Linking to CSS:
+
+Navigate to the Console tab.
+Copy and pase the text below to create a link element that links to the css, and press enter:
+
+var stlink = document.createElement('link');
+stlink.rel = "stylesheet";
+stlink.href = "https://guidedlearning.oracle.com/player/latest/static/css/stTip.css";
+document.getElementsByTagName('head')[0].appendChild(stlink);
+
+3. Injecting JQuery:
+
+Copy and pase the text below to create a script element that injects JQuery, and press enter:
+
+var jq = document.createElement('script');
+jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
+document.getElementsByTagName('head')[0].appendChild(jq);
+
+4. Run guide and display tooltips:
+
+In this step, add the player.js file to the page's sources and run it, by:
+Navigate to the Sources tab and press Snippets.
+Press the new snippet button and create a snippet called 'player.js'.
+Copy and paste everything from the player.js file in the repository to the player.js snippet.
+Press the run arrow button or Ctrl+Enter to run the player.

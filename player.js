@@ -1,28 +1,3 @@
-//needed html
-{/* <div class="sttip">
-<div class="tooltip in">
-    <div class="tooltip-arrow"></div>
-    <div class="tooltip-arrow second-arrow"></div>
-    <div class="popover-inner">
-        <-- tiplate goes here -->
-    </div>
-</div>
-</div> */}
-
-//create style link
-var stlink = document.createElement('link');
-stlink.rel = "stylesheet";
-stlink.href = "https://guidedlearning.oracle.com/player/latest/static/css/stTip.css";
-document.getElementsByTagName('head')[0].appendChild(stlink);
-// -------
-// inject jquery
-var jq = document.createElement('script');
-jq.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
-document.getElementsByTagName('head')[0].appendChild(jq);
-//---
-//inject tip script
-
-
 $(document).ready(function () {
 
 
@@ -128,7 +103,7 @@ function doStep(step, container, index) {
 
     if (step.action.type == "tip") {
         //fade in
-        $("div.sttip").fadeIn(600);
+        $("div.sttip").fadeIn(step.action.wdInterval);
         //removing previously added position
         $('div.sttip').css("position", "");
         $('div.sttip').css("right", "");
@@ -171,7 +146,7 @@ function doStep(step, container, index) {
         //selects the tip
         setTimeout(function () {
             $(step.action.selector).css({ 'box-shadow': '4px 4px 4px 4px lightblue', 'border': '1px solid lightgray' })
-            }, 600);
+            }, step.action.wdInterval);
     }
     else {
         closeTip(step);
