@@ -23,7 +23,6 @@ document.getElementsByTagName('head')[0].appendChild(jq);
 //inject tip script
 
 
-
 $(document).ready(function () {
 
 
@@ -50,21 +49,31 @@ function jsonCallback(json) {
 
     //setting next button to render next step if exists
     $("body").on("click", ".next-btn", function () {
-        if (nextStepIndex < steps.length - 1) {
+        if (nextStepIndex < steps.length - 2) {
             //clearing selector
-            $(steps[nextStepIndex].action.selector).css({'box-shadow' : 'none','border': 'none'});
+            $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
             //getting next index
             nextStepIndex++;
             doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
+        }
+        else {
+            //if it'ss the last tip it's the closing event, will return index one step back because it hasn't moved on to a next step
+            nextStepIndex++;
+            doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
+            nextStepIndex--;
         }
     });
     //setting prev button to render prev step
     $("body").on("click", ".prev-btn", function () {
         //clearing selector
-        $(steps[nextStepIndex].action.selector).css({'box-shadow' : 'none','border': 'none'});
+        $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
         //getting next index
         nextStepIndex--;
         doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
+    });
+    //setting button to close the tips
+    $("body").on("click", 'button:contains("✕")', function () {
+        closeTip(steps[nextStepIndex]);
     });
 
     console.log(tipContainerHtml);
@@ -87,6 +96,13 @@ function applyCSS(cssString) {
 //function that applies html
 function applyHTML(htmlString) {
     $(htmlString).appendTo(".popover-inner");
+}
+//function that closes tips by un-highlighting the elements and replacing tip div with empty string
+function closeTip(step) {
+    if (confirm("Are you sure you want to to close the tips?")) {
+        $(step.action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
+        $('div.sttip').html("");
+    }
 }
 //function that renders step
 function doStep(step, container, index) {
@@ -114,11 +130,11 @@ function doStep(step, container, index) {
 
         //putting the step in its placement
         let placementAmount = "";
-        if (step.action.placement == "right") {placementAmount="300px";  $('div.sttip').css("top", "50px");}
-        else {placementAmount="150px";}
-            $('div.sttip').css("position", "absolute");
-            $('div.sttip').css(step.action.placement, placementAmount);
-           
+        if (step.action.placement == "right") { placementAmount = "300px"; $('div.sttip').css("top", "50px"); }
+        else { placementAmount = "150px"; }
+        $('div.sttip').css("position", "absolute");
+        $('div.sttip').css(step.action.placement, placementAmount);
+
 
 
         //rendering step with the the step's index
@@ -126,7 +142,10 @@ function doStep(step, container, index) {
         let indexString = String(index + 1);
         applyHTML(container.substring(0, tipStepIndex + 1) + indexString + " " + container.substring(tipStepIndex + 2));
 
-       $(step.action.selector).css({'box-shadow' : '4px 4px 4px 4px lightblue','border': '1px solid lightgray'})
+        $(step.action.selector).css({ 'box-shadow': '4px 4px 4px 4px lightblue', 'border': '1px solid lightgray' })
+    }
+    else
+    {
+        closeTip(step);
     }
 }
-
