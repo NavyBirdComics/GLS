@@ -54,6 +54,8 @@ function jsonCallback(json) {
             $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
             //getting next index
             nextStepIndex++;
+            //fades out for the fade in
+            $("div.sttip").fadeOut(10);
             doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
         }
         else {
@@ -69,6 +71,8 @@ function jsonCallback(json) {
         $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
         //getting next index
         nextStepIndex--;
+        //fades out for the fade in
+        $("div.sttip").fadeOut(10);
         doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
     });
     //setting button to close the tips
@@ -79,15 +83,16 @@ function jsonCallback(json) {
     $("body").on("click", ".default-later-btn", function () {
         //clearing the selector and setting the div's display to none
         if (confirm("Are you sure you want to be reminded of the tips in 5 seconds?")) {
-        $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
-        $('div.sttip').css("display","none");
-        setTimeout(function(){
-            //in 5 seconds, will show div and go back to the first step
-            alert("reminding you of the tips!")
-            $('div.sttip').css("display","inline");
-            doStep(steps[0], tipContainerHtml, nextStepIndex);
-        },5000);
-    }
+            $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
+            $('div.sttip').css("display", "none");
+            setTimeout(function () {
+                //in 5 seconds, will show div and go back to the first step
+                alert("reminding you of the tips!")
+                $('div.sttip').css("display", "inline");
+                nextStepIndex = 0;
+                doStep(steps[0], tipContainerHtml, nextStepIndex);
+            }, 5000);
+        }
     });
 
     console.log(tipContainerHtml);
@@ -122,6 +127,8 @@ function closeTip(step) {
 function doStep(step, container, index) {
 
     if (step.action.type == "tip") {
+        //fade in
+        $("div.sttip").fadeIn(600);
         //removing previously added position
         $('div.sttip').css("position", "");
         $('div.sttip').css("right", "");
@@ -152,12 +159,19 @@ function doStep(step, container, index) {
 
 
 
-        //rendering step with the the step's index
-        let tipStepIndex = container.indexOf('>/');
-        let indexString = String(index + 1);
-        applyHTML(container.substring(0, tipStepIndex + 1) + indexString + " " + container.substring(tipStepIndex + 2));
+        //renders tip container, if its the last tip will switch next button text with 'done'
+        let tipStepIndex = container.indexOf('>Next');
+        if (step.action.roleTexts.nextBt) {
+            applyHTML(container.substring(0, tipStepIndex + 1) + step.action.roleTexts.nextBt + container.substring(tipStepIndex + 5));
+        }
+        else {
+            applyHTML(container);
+        }
 
-        $(step.action.selector).css({ 'box-shadow': '4px 4px 4px 4px lightblue', 'border': '1px solid lightgray' })
+        //selects the tip
+        setTimeout(function () {
+            $(step.action.selector).css({ 'box-shadow': '4px 4px 4px 4px lightblue', 'border': '1px solid lightgray' })
+            }, 600);
     }
     else {
         closeTip(step);
