@@ -64,7 +64,7 @@ function jsonCallback(json) {
         }
     });
     //setting prev button to render prev step
-    $("body").on("click", ".prev-btn", function () {
+    $("body").on("click", ".prev-btn:last", function () {
         //clearing selector
         $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
         //getting next index
@@ -74,6 +74,20 @@ function jsonCallback(json) {
     //setting button to close the tips
     $("body").on("click", 'button:contains("✕")', function () {
         closeTip(steps[nextStepIndex]);
+    });
+    //setting up remind me later button
+    $("body").on("click", ".default-later-btn", function () {
+        //clearing the selector and setting the div's display to none
+        if (confirm("Are you sure you want to be reminded of the tips in 5 seconds?")) {
+        $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
+        $('div.sttip').css("display","none");
+        setTimeout(function(){
+            //in 5 seconds, will show div and go back to the first step
+            alert("reminding you of the tips!")
+            $('div.sttip').css("display","inline");
+            doStep(steps[0], tipContainerHtml, nextStepIndex);
+        },5000);
+    }
     });
 
     console.log(tipContainerHtml);
@@ -99,7 +113,7 @@ function applyHTML(htmlString) {
 }
 //function that closes tips by un-highlighting the elements and replacing tip div with empty string
 function closeTip(step) {
-    if (confirm("Are you sure you want to to close the tips?")) {
+    if (confirm("Are you sure you want to close the tips?")) {
         $(step.action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
         $('div.sttip').html("");
     }
@@ -127,7 +141,8 @@ function doStep(step, container, index) {
         else {
             $('.tooltip').removeClass(stepClass);
         }
-
+        //showLaterBt
+        $('.tooltip').addClass("showLaterBt");
         //putting the step in its placement
         let placementAmount = "";
         if (step.action.placement == "right") { placementAmount = "300px"; $('div.sttip').css("top", "50px"); }
@@ -144,8 +159,7 @@ function doStep(step, container, index) {
 
         $(step.action.selector).css({ 'box-shadow': '4px 4px 4px 4px lightblue', 'border': '1px solid lightgray' })
     }
-    else
-    {
+    else {
         closeTip(step);
     }
 }
