@@ -14,10 +14,6 @@ function jsonCallback(json) {
     let steps = json.data.structure.steps;
     let tipCss = json.data.css;
 
-    //generate every step
-    steps.forEach(step => {
-        console.log(step);
-    });
     // setting variable to save the index of the step & doing the next step
     let nextStepIndex = 0;
     doStep(steps[0], tipContainerHtml, nextStepIndex);
@@ -70,17 +66,9 @@ function jsonCallback(json) {
         }
     });
 
-    console.log(tipContainerHtml);
-
-    //hovertip
-    console.log(json.data.tiplates.hoverTip);
-    // applyHTML(json.data.tiplates.hovertip);
-
     //applying css from jsonp
     applyCSS(tipCss);
 
-    //settings
-    console.log(json.data.settings);
 }
 
 //function that applies css
