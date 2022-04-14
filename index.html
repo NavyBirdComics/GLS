@@ -37,12 +37,18 @@
             //setting next button to render next step if exists
             $("body").on("click", ".next-btn", function () {
                 if (nextStepIndex < steps.length - 1) {
+                    //clearing selector
+                    $(steps[nextStepIndex].action.selector).css({'box-shadow' : 'none','border': 'none'});
+                    //getting next index
                     nextStepIndex++;
                     doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
                 }
             });
             //setting prev button to render prev step
             $("body").on("click", ".prev-btn", function () {
+                //clearing selector
+                $(steps[nextStepIndex].action.selector).css({'box-shadow' : 'none','border': 'none'});
+                //getting next index
                 nextStepIndex--;
                 doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
             });
@@ -75,6 +81,8 @@
                 //removing previously added position
                 $('div.sttip').css("position", "");
                 $('div.sttip').css("right", "");
+                $('div.sttip').css("bottom", "");
+                $('div.sttip').css("top", "");
 
                 //handling html
                 stepHTML = step.action.contents;
@@ -91,10 +99,12 @@
                 }
 
                 //putting the step in its placement
-                if (step.action.placement == "right") {
+                let placementAmount = "";
+                if (step.action.placement == "right") {placementAmount="300px";  $('div.sttip').css("top", "50px");}
+                else {placementAmount="150px";}
                     $('div.sttip').css("position", "absolute");
-                    $('div.sttip').css("right", "300px");
-                }
+                    $('div.sttip').css(step.action.placement, placementAmount);
+                   
 
 
                 //rendering step with the the step's index
@@ -102,7 +112,7 @@
                 let indexString = String(index + 1);
                 applyHTML(container.substring(0, tipStepIndex + 1) + indexString + " " + container.substring(tipStepIndex + 2));
 
-
+               $(step.action.selector).css({'box-shadow' : '4px 4px 4px 4px lightblue','border': '1px solid lightgray'})
             }
         }
 
@@ -111,6 +121,9 @@
 </head>
 
 <body>
+    <div id="hplogo">
+        testing testing
+    </div>
     <div class="sttip">
         <div class="tooltip in">
             <div class="tooltip-arrow"></div>
