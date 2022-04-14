@@ -30,13 +30,28 @@
             steps.forEach(step => {
                 console.log(step);
             });
-            doStep(steps[1], tipContainerHtml);
+            // setting variable to save the index of the step & doing the next step
+            let nextStepIndex = 0;
+            doStep(steps[0], tipContainerHtml, nextStepIndex);
+
+            //setting next button to render next step if exists
+            $("body").on("click", ".next-btn", function () {
+                if (nextStepIndex < steps.length - 1) {
+                    nextStepIndex++;
+                    doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
+                }
+            });
+            //setting prev button to render prev step
+            $("body").on("click", ".prev-btn", function () {
+                nextStepIndex--;
+                doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
+            });
 
             console.log(tipContainerHtml);
 
             //hovertip
             console.log(json.data.tiplates.hoverTip);
-            applyHTML(json.data.tiplates.hovertip);
+            // applyHTML(json.data.tiplates.hovertip);
 
             //applying css from jsonp
             applyCSS(tipCss);
@@ -45,35 +60,49 @@
             console.log(json.data.settings);
         }
 
+        //function that applies css
         function applyCSS(cssString) {
             $("<style>" + cssString + "</style>").appendTo("head");
         }
-
+        //function that applies html
         function applyHTML(htmlString) {
             $(htmlString).appendTo(".popover-inner");
         }
-
-        function doStep(step, container) {
+        //function that renders step
+        function doStep(step, container, index) {
 
             if (step.action.type == "tip") {
-                //removing previously added classes
-                $('.tooltip').removeClass(stepClass);
+                //removing previously added position
+                $('div.sttip').css("position", "");
+                $('div.sttip').css("right", "");
 
                 //handling html
                 stepHTML = step.action.contents;
                 stepHTML = Object.values(stepHTML)[0];
                 $(".popover-inner").html(stepHTML);
 
-                //applying the step's classes
+                //applying the step's classes to show back button if needed
                 var stepClass = step.action.classes;
-                $('.tooltip').addClass(stepClass);
+                if (index > 0) {
+                    $('.tooltip').addClass(stepClass);
+                }
+                else {
+                    $('.tooltip').removeClass(stepClass);
+                }
 
                 //putting the step in its placement
-                $('div').css("float", step.action.placement);
+                if (step.action.placement == "right") {
+                    $('div.sttip').css("position", "absolute");
+                    $('div.sttip').css("right", "300px");
+                }
 
-                //displaying the step's index
-                let tipStepIndex = container.indexOf('>Step ');
-                applyHTML(container.substring(0, tipStepIndex + 6) + step.action.stepOrdinal + " " + container.substring(tipStepIndex + 6));
+
+                //rendering step with the the step's index
+                let tipStepIndex = container.indexOf('>/');
+                let indexString = String(index + 1);
+                applyHTML(container.substring(0, tipStepIndex + 1) + indexString + " " + container.substring(tipStepIndex + 2));
+
+
             }
         }
 
