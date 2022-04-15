@@ -31,7 +31,7 @@
             doStep(steps[0], tipContainerHtml, nextStepIndex);
 
             //setting next button to render next step if exists
-            $("body").on("click", ".next-btn", function () {
+            $("body").on("click", '.next-btn:contains("Next")', function () {
                 if (nextStepIndex < steps.length - 2) {
                     //clearing selector
                     $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
@@ -41,15 +41,9 @@
                     $("div.sttip").fadeOut(10);
                     doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
                 }
-                else {
-                    //if it'ss the last tip it's the closing event, will return index one step back because it hasn't moved on to a next step
-                    nextStepIndex++;
-                    doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
-                    nextStepIndex--;
-                }
             });
             //setting prev button to render prev step
-            $("body").on("click", ".prev-btn:last", function () {
+            $("body").on("click", '.prev-btn:last', function () {
                 //clearing selector
                 $(steps[nextStepIndex].action.selector).css({ 'box-shadow': 'none', 'border': 'none' });
                 //getting next index
@@ -59,7 +53,7 @@
                 doStep(steps[nextStepIndex], tipContainerHtml, nextStepIndex);
             });
             //setting button to close the tips
-            $("body").on("click", 'button:contains("✕")', function () {
+            $("body").on("click", 'button:contains("✕"),.next-btn:contains("Done")', function () {
                 closeTip(steps[nextStepIndex]);
             });
             //setting up remind me later button
@@ -147,9 +141,6 @@
                 setTimeout(function () {
                     $(step.action.selector).css({ 'box-shadow': '4px 4px 4px 4px lightblue', 'border': '1px solid lightgray' })
                     }, step.action.wdInterval);
-            }
-            else {
-                closeTip(step);
             }
         }
 
